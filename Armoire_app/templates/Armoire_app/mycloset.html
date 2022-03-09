@@ -1,0 +1,541 @@
+{% extends "Armoire_app/layout.html" %}
+{% load static %}
+{% block body %}
+
+<div class="container-xxl justify-content-center" id="outfits-pieces" style="padding-top: 20px; padding-bottom: 20px; display: block; margin:auto 100px auto 100px">
+    <div class="row">
+        <div class="col-6 align-middle" style="padding-left: 0px;">
+            <h3 class="my-auto" style="text-align: left;">My Outfits</h3>
+        </div>
+        <div class="col-6 text-right my-auto">
+            <a href="#" id="add-outfit" onclick="show_outfit_form()" class="label-small">Add Outfit</a> - <a href="#" id="delete-outfit" onclick="show_delete_outfit()" class="label-small">Delete Outfit</a>
+        </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel outfits-carousel" id="outfits" style="display: block">
+        <button class="carousel__button carousel__button--left outfits-carousel__button--left is-hidden outfits-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container outfits-carousel__track-container">
+            <div class="carousel__track outfits-carousel__track">
+        {% for outfit, clothing in outfitpieces.items %}
+        {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide outfits-carousel__slide outfits-current-slide mx-auto">{% endif %}
+            <a href="{% url 'outfit' outfit.id %}">
+            <div class="closet-card-outfit col-3">
+                
+                <div class="card-body mx-auto">
+                    <div class="outfit-grid container-fluid">
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.0.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.0.image.url }}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.1.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.1.image.url }}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.2.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.2.image.url }}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.3.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.3.image.url }}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'outfit' outfit.id %}">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ outfit.name }}</p>
+                    </a>
+                    </div>
+                
+            </div>
+            </a>
+            <!-- following logic is for determining rows -->
+            {% if forloop.counter|divisibleby:4 and forloop.counter != outfitpieces|length %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide outfits-carousel__slide mx-auto">
+            {% endif %}
+            {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        {% endfor %}              
+        </div>
+        </div>
+        {% if outfitpieces|length > 4 %}
+        <button class="carousel__button carousel__button--right outfits-carousel__button--right">
+            <img src="{% static 'assets/right-carousel-arrow.png' %}">
+        </button>
+        {% endif %}
+        <div class="carousel__nav outfits-carousel__nav mx-auto">
+            {% for outfit, clothing in outfitpieces.items %}
+            {% if forloop.first and outfitpieces|length > 4 %}<button class="carousel__indicator current-slide outfits-carousel__indicator outfits-current-slide"></button>{% endif %}
+            {% if forloop.counter|divisibleby:4 and forloop.counter != outfitpieces|length %}<button class="carousel__indicator outfits-carousel__indicator"></button>{% endif %}
+            
+
+            {% endfor %}  
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6" style="padding-left: 0px;">
+            <h3 class="my-auto" style="text-align: left;">My Clothes</h3>
+        </div>
+        <div class="col-6 text-right my-auto">
+            <a href="#" id="add-piece" onclick="show_piece_form()" class="label-small">Add Piece</a> - <a href="#" id="delete-piece" onclick="show_delete_field()" class="label-small">Delete Piece</a>
+        </div>
+        
+    </div>
+    <div class="row" style="margin-top: 26px; margin-bottom: 26px">
+        <div class="clothing-buttons">
+            <button class="btn-primary-small category-button" onclick="show_all()">All</button>
+            <button class="btn-secondary-small category-button" onclick="show_tops()">Tops</button>
+            <button class="btn-secondary-small category-button" onclick="show_bottoms()">Bottoms</button>
+            <button class="btn-secondary-small category-button" onclick="show_onepieces()">Onepieces</button>
+            <button class="btn-secondary-small category-button" onclick="show_shoes()">Shoes</button>
+            <button class="btn-secondary-small category-button" onclick="show_accessories()">Accessories</button>
+        </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel all-carousel" id="all" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden all-carousel__button all-carousel__button--left all-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container all-carousel__track-container">
+            <div class="carousel__track--clothing all-carousel__track">
+    {% for piece in pieces %}
+    {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide all-carousel__slide all-current-slide mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ piece.id }}">
+            
+            <div class="card-body mx-auto">
+                <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                    <p class="b2">{{ piece.category }}</p>
+                </div>
+                
+        </div>
+    
+    {% if forloop.counter|divisibleby:4 and forloop.counter != pieces.count %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row carousel__slide all-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+    </div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+            </div>
+        </div>
+    {% if pieces.count > 4 %}
+    <button class="carousel__button--clothing carousel__button--right all-carousel__button all-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+        <div class="carousel__nav all-carousel__nav mx-auto">
+            {% for piece in pieces %}
+            {% if forloop.first and pieces.count > 4 %}<button class="carousel__indicator current-slide all-carousel__indicator all-current-slide"></button>{% endif %}
+            {% if forloop.counter|divisibleby:4 and forloop.counter != pieces.count %}<button class="carousel__indicator all-carousel__indicator"></button>{% endif %}
+            
+            {% endfor %}  
+        </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel tops-carousel" id="tops" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden tops-carousel__button tops-carousel__button--left tops-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container tops-carousel__track-container">
+            <div class="carousel__track--clothing tops-carousel__track">
+    {% for top in tops %}
+    {% if forloop.first %}<div class="row d-flex justify-content-center piece-row mx-auto carousel__slide current-slide tops-carousel__slide tops-current-slide">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ top.id }}">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ top.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ top.name }}</p>
+                    <p class="b2">{{ top.category }}</p>
+                </div>
+            
+        </div>
+
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row carousel__slide tops-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+    </div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+        </div>
+        </div>
+    {% if tops.count > 4 %}
+    <button class="carousel__button--clothing carousel__button--right tops-carousel__button tops-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+    <div class="carousel__nav tops-carousel__nav mx-auto">
+        {% for top in tops %}
+        {% if forloop.first and tops.count > 4 %}<button class="carousel__indicator current-slide tops-carousel__indicator tops-current-slide"></button>{% endif %}
+        {% if forloop.counter|divisibleby:4 and forloop.counter != tops.count %}<button class="carousel__indicator tops-carousel__indicator"></button>{% endif %}
+        
+        {% endfor %}  
+    </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel bottoms-carousel" id="bottoms" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden bottoms-carousel__button--left bottoms-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container bottoms-carousel__track-container">
+            <div class="carousel__track--clothing bottoms-carousel__track">
+    {% for bottom in bottoms %}
+    {% if forloop.first %}<div class="carousel__slide current-slide bottoms-carousel__slide bottoms-current-slide"><div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ bottom.id }}">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ bottom.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ bottom.name }}</p>
+                    <p class="b2">{{ bottom.category }}</p>
+                </div>
+            
+        </div>
+
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+<!-- slide is two rows high -->
+        {% if forloop.counter|divisibleby:4 and forloop.counter != bottoms.count%}
+    </div></div>
+    <div class="carousel__slide bottoms-carousel__slide"><div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+
+        {% if forloop.last %}
+    </div></div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+        </div>
+        </div>
+    {% if bottoms.count > 4 %}
+    <button class="carousel__button--clothing carousel__button--right bottoms-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+    <div class="carousel__nav bottoms-carousel__nav mx-auto">
+        {% for bottom in bottoms %}
+        {% if forloop.first and bottoms.count > 4 %}<button class="carousel__indicator current-slide bottoms-carousel__indicator bottoms-current-slide"></button>{% endif %}
+        {% if forloop.counter|divisibleby:4 and forloop.counter != bottoms.count %}<button class="carousel__indicator bottoms-carousel__indicator"></button>{% endif %}
+        
+        {% endfor %}  
+    </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel onepieces-carousel" id="onepieces" style="display: block">
+        <button class="carousel__button carousel__button--left is-hidden onepieces-carousel__button onepieces-carousel__button--left onepieces-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container onepieces-carousel__track-container">
+            <div class="carousel__track--clothing onepieces-carousel__track">
+    {% for onepiece in onepieces %}
+    {% if forloop.first %}<div class="carousel__slide current-slide onepieces-carousel__slide onepieces-current-slide"><div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ onepiece.id }}">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ onepiece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ onepiece.name }}</p>
+                    <p class="b2">{{ onepiece.category }}</p>
+                </div>
+            
+        </div>
+
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+<!-- slide is two rows high -->
+        {% if forloop.counter|divisibleby:4 and forloop.counter != onepieces.count%}
+    </div></div>
+    <div class="carousel__slide onepieces-carousel__slide"><div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+
+        {% if forloop.last %}
+    </div></div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+        </div>
+        </div>
+    {% if onepieces.count > 4 %}
+    <button class="carousel__button carousel__button--right onepieces-carousel__button onepieces-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+    <div class="carousel__nav onepieces-carousel__nav mx-auto">
+        {% for onepiece in onepieces %}
+        {% if forloop.first and onepieces.count > 4 %}<button class="carousel__indicator current-slide onepieces-carousel__indicator onepieces-current-slide"></button>{% endif %}
+        {% if forloop.counter|divisibleby:4 and forloop.counter != onepieces.count %}<button class="carousel__indicator onepieces-carousel__indicator"></button>{% endif %}
+        
+        {% endfor %}  
+    </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel shoes-carousel" id="shoes" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden shoes-carousel__button shoes-carousel__button--left shoes-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container shoes-carousel__track-container">
+            <div class="carousel__track--clothing shoes-carousel__track">
+    {% for shoe in shoes %}
+    {% if forloop.first %}<div class="carousel__slide current-slide shoes-carousel__slide shoes-current-slide"><div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ shoe.id }}">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ shoe.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ shoe.name }}</p>
+                    <p class="b2">{{ shoe.category }}</p>
+                </div>
+            
+        </div>
+
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+<!-- slide is two rows high -->
+        {% if forloop.counter|divisibleby:4 and forloop.counter != shoes.count%}
+    </div></div>
+    <div class="carousel__slide shoes-carousel__slide"><div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+
+        {% if forloop.last %}
+    </div></div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+        </div>
+        </div>
+    {% if shoes.count > 4 %}
+    <button class="carousel__button--clothing carousel__button--right shoes-carousel__button shoes-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+    <div class="carousel__nav shoes-carousel__nav mx-auto">
+        {% for shoe in shoes %}
+        {% if forloop.first and shoes.count > 4 %}<button class="carousel__indicator current-slide shoes-carousel__indicator shoes-current-slide"></button>{% endif %}
+        {% if forloop.counter|divisibleby:4 and forloop.counter != shoes.count %}<button class="carousel__indicator shoes-carousel__indicator"></button>{% endif %}
+        
+        {% endfor %}  
+    </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel accessories-carousel" id="accessories" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden accessories-carousel__button accessories-carousel__button--left accessories-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container accessories-carousel__track-container">
+            <div class="carousel__track--clothing accessories-carousel__track">
+    {% for accessory in accessories %}
+    {% if forloop.first %}<div class="carousel__slide current-slide accessories-carousel__slide accessories-current-slide"><div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ accessory.id }}">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ accessory.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ accessory.name }}</p>
+                    <p class="b2">{{ accessory.category }}</p>
+                </div>
+            
+        </div>
+
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+<!-- slide is two rows high -->
+        {% if forloop.counter|divisibleby:4 and forloop.counter != accessories.count%}
+    </div></div>
+    <div class="carousel__slide accessories-carousel__slide"><div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+
+        {% if forloop.last %}
+    </div></div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+        </div>
+        </div>
+    {% if accessories.count > 4 %}
+    <button class="carousel__button--clothing carousel__button--right accessories-carousel__button accessories-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+    <div class="carousel__nav accessories-carousel__nav mx-auto">
+        {% for accessory in accessories %}
+        {% if forloop.first and accessories.count > 4 %}<button class="carousel__indicator current-slide accessories-carousel__indicator accessories-current-slide"></button>{% endif %}
+        {% if forloop.counter|divisibleby:4 and forloop.counter != accessories.count %}<button class="carousel__indicator accessories-carousel__indicator"></button>{% endif %}
+        
+        {% endfor %}  
+    </div>
+    </div>
+    
+</div>
+<div class="container-xxl justify-content-center delete-pieces" id="delete-pieces" style="padding-top: 20px; padding-bottom: 20px; display: none; margin:auto 100px auto 100px">
+    <div class="row">
+        <div class="col-6" style="padding-left: 0px;">
+            <h3 class="my-auto" style="text-align: left;">Delete Clothes</h3>
+        </div>
+        <div class="col-6 text-right my-auto">
+            <a href="{% url 'mycloset' %}" id="back" class="label-small">Back</a>
+        </div>
+        
+    </div>
+    <div class="container-xxl clothes-container mx-auto" id="all" style="display: block">
+    {% for piece in pieces %}
+    {% if forloop.first %}<div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+
+        <div class="closet-card col-3" id="entry-{{ piece.id }}">
+            
+            <div class="card-body mx-auto">
+                <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                <img src="{% static 'assets/close-button.png' %}" class="close-button" onclick="delete_entry('{{ piece.id }}', this)">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                    <p class="b2">{{ piece.category }}</p>
+            </div>
+                
+        </div>
+    
+    {% if forloop.counter|divisibleby:4 %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+    </div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+       
+    </div>
+</div>
+<div class="container-xxl justify-content-center delete-outfits" id="delete-outfits" style="padding-top: 20px; padding-bottom: 20px; display: none; margin:auto 100px auto 100px">
+    <div class="row">
+        <div class="col-6" style="padding-left: 0px;">
+            <h3 class="my-auto" style="text-align: left;">Delete Outfits</h3>
+        </div>
+        <div class="col-6 text-right my-auto">
+            <a href="{% url 'mycloset' %}" id="back" class="label-small">Back</a>
+        </div>
+        
+    </div>
+    <div class="container-xxl clothes-container mx-auto"  style="display: block">
+        {% for outfit, clothing in outfitpieces.items %}
+        {% if forloop.first %}<div class="row d-flex justify-content-center piece-row mx-auto">{% endif %}
+            
+            <div class="closet-card-outfit col-3" id="outfit-{{ outfit.id }}">
+                
+                <div class="card-body mx-auto">
+                    <div class="outfit-grid container-fluid">
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.0.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.0.image.url }}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.1.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.1.image.url }}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.2.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.2.image.url }}" class="outfit-img-resize" style="border: none; padding-right: 5px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-6 outfit-img-col">
+                                {% if not clothing.3.image.url %}
+                                <img src="{% static 'assets/outfit-blank.png' %}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% else %}
+                                <img src="{{ clothing.3.image.url }}" class="outfit-img-resize" style="border: none; padding-left: 5px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <img src="{% static 'assets/close-button.png' %}" class="close-button" onclick="delete_outfit('{{ outfit.id }}', this)">
+                    
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ outfit.name }}</p>
+                    
+                </div>
+                
+            </div>
+            <!-- following logic is for determining rows -->
+            {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row mx-auto">
+            {% endif %}
+            {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        {% endfor %}
+    </div>
+</div>
+<div class="container" id="piece-form" style="display: none;">
+    <div class="form">
+        <form method="POST" enctype="multipart/form-data" style="display: inline-block; margin-left: auto; margin-right: auto; text-align: left;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn-primary-medium">Submit</button><button id="back-piece" onclick="hide_forms()" type="button" class="btn-secondary-medium" style="margin-left: 5px;">Back</button>
+        </form>
+
+    </div>
+</div>
+<div class="container" id="outfit-form" style="display: none; margin-top: 50px;">
+    <div class="form">
+    <form method="POST" action="{% url 'mycloset' %}" style="display: inline-block; margin-left: auto; margin-right: auto; text-align: left;">
+        {% csrf_token %}
+        <div class="form-group">
+            Outfit Name: 
+            <br>
+            <input class="form-control" type="text" id="outfit-name" name="outfit-name" maxlength="64" required="required" autocomplete="off"
+             style="margin-bottom: 20px;">
+             <button class="btn-primary-medium">Submit</button><button id="back-piece" onclick="hide_forms()" type="button" class="btn-secondary-medium" style="margin-left: 5px;">Back</button>
+        </div>
+    </form>
+    </div>
+</div>
+
+<script src="{% static 'Armoire_app/carousel.js' %}"></script>
+{% endblock %}

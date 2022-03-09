@@ -1,0 +1,380 @@
+{% extends "Armoire_app/layout.html" %}
+{% load static %}
+{% block body %}
+<div class="container-xxl justify-content-center outfit-id" id="{{ outfit.id }}" style="padding-bottom: 20px; display: block; margin:5% 100px auto 100px ">
+    <div class="row">
+        <div class="col-6 align-middle" style="padding-left: 0px;">
+            <h3 class="my-auto" style="text-align: left;">{{ outfit.name }}</h3>
+        </div>
+        <div class="col-6 text-right my-auto add-piece">
+            <a href="#add" id="add-piece" onclick="show_all_pieces()" class="label-small">Add Piece</a>
+        </div>
+        <div class="col-6 text-right my-auto back-to-outfit" style="display: none;">
+            <a href="{% url 'outfit' outfit.id %}" id="back" class="label-small">Back</a>
+        </div>
+    </div>
+    <div class="container-xxl clothes-container mx-auto carousel outfit-carousel outfit" id="outfit" style="display: block">
+        <button class="carousel__button--clothing carousel__button--left is-hidden outfit-carousel__button outfit-carousel__button--left outfit-is-hidden">
+            <img src="{% static 'assets/left-carousel-arrow.png' %}">
+        </button>
+        <div class="carousel__track-container outfit-carousel__track-container">
+            <div class="carousel__track--clothing outfit-carousel__track">
+    {% for piece in pieces %}
+    {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide outfit-carousel__slide outfit-current-slide mx-auto">{% endif %}
+
+        <div class="closet-card col-3">
+            
+                <div class="card-body mx-auto">
+                    <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                    <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                    <p class="b2">{{ piece.category }}</p>
+                </div>
+            
+        </div>
+    
+    {% if forloop.counter|divisibleby:4 and forloop.counter != pieces|length %}
+    </div>
+    <div class="row d-flex justify-content-center piece-row carousel__slide outfit-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+    </div>
+    {% endif %}
+    <!-- end of row logic -->
+
+    {% endfor %}
+            </div>
+        </div>
+    {% if pieces|length > 4 %}
+    <button class="carousel__button--clothing carousel__button--right outfit-carousel__button outfit-carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+    {% endif %}
+        <div class="carousel__nav outfit-carousel__nav mx-auto">
+            {% for piece in pieces %}
+            {% if forloop.first and pieces|length > 4 %}<button class="carousel__indicator current-slide outfit-carousel__indicator outfit-current-slide"></button>{% endif %}
+            {% if forloop.counter|divisibleby:4 and forloop.counter != pieces|length %}<button class="carousel__indicator outfit-carousel__indicator"></button>{% endif %}
+            
+            {% endfor %}  
+        </div>
+    </div>
+    <div class="container-xxl clothes-container" id="all-pieces" style="padding-bottom: 20px; display: block;">
+        <div class="row" style="margin-top: 26px; margin-bottom: 26px">
+            <div class="clothing-buttons">
+                <button class="btn-primary-small category-button" onclick="show_all()">All</button>
+                <button class="btn-secondary-small category-button" onclick="show_tops()">Tops</button>
+                <button class="btn-secondary-small category-button" onclick="show_bottoms()">Bottoms</button>
+                <button class="btn-secondary-small category-button" onclick="show_onepieces()">Onepieces</button>
+                <button class="btn-secondary-small category-button" onclick="show_shoes()">Shoes</button>
+                <button class="btn-secondary-small category-button" onclick="show_accessories()">Accessories</button>
+            </div>
+        </div>
+        <div class="carousel all-carousel" id="all" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden all-carousel__button all-carousel__button--left all-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container all-carousel__track-container">
+                <div class="carousel__track--clothing all-carousel__track">
+                {% for piece in all %}
+    
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide all-carousel__slide all-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide all-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+    
+        {% endfor %}
+                </div>
+            </div>
+            {% if all.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right all-carousel__button all-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav all-carousel__nav mx-auto">
+                {% for piece in all %}
+                {% if forloop.first and all.count > 4 %}<button class="carousel__indicator current-slide all-carousel__indicator all-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != all.count %}<button class="carousel__indicator all-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+        <div class="carousel tops-carousel" id="tops" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden tops-carousel__button tops-carousel__button--left tops-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container tops-carousel__track-container">
+                <div class="carousel__track--clothing tops-carousel__track">
+                {% for piece in tops %}
+        
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide tops-carousel__slide tops-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide tops-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        
+        {% endfor %}
+                </div>
+            </div>
+            {% if tops.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right tops-carousel__button tops-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav tops-carousel__nav mx-auto">
+                {% for piece in tops %}
+                {% if forloop.first and tops.count > 4 %}<button class="carousel__indicator current-slide tops-carousel__indicator tops-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != tops.count %}<button class="carousel__indicator tops-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+        <div class="carousel bottoms-carousel" id="bottoms" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden bottoms-carousel__button bottoms-carousel__button--left bottoms-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container bottoms-carousel__track-container">
+                <div class="carousel__track--clothing bottoms-carousel__track">
+                {% for piece in bottoms %}
+        
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide bottoms-carousel__slide bottoms-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide bottoms-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        
+        {% endfor %}
+                </div>
+            </div>
+            {% if bottoms.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right bottoms-carousel__button bottoms-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav bottoms-carousel__nav mx-auto">
+                {% for piece in bottoms %}
+                {% if forloop.first and bottoms.count > 4 %}<button class="carousel__indicator current-slide bottoms-carousel__indicator bottoms-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != bottoms.count %}<button class="carousel__indicator bottoms-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+        <div class="carousel onepieces-carousel" id="onepieces" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden onepieces-carousel__button onepieces-carousel__button--left onepieces-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container onepieces-carousel__track-container">
+                <div class="carousel__track--clothing onepieces-carousel__track">
+                {% for piece in onepieces %}
+        
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide onepieces-carousel__slide onepieces-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide onepieces-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        
+        {% endfor %}
+                </div>
+            </div>
+            {% if onepieces.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right onepieces-carousel__button onepieces-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav onepieces-carousel__nav mx-auto">
+                {% for piece in onepieces %}
+                {% if forloop.first and onepieces.count > 4 %}<button class="carousel__indicator current-slide onepieces-carousel__indicator onepieces-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != onepieces.count %}<button class="carousel__indicator onepieces-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+        <div class="carousel shoes-carousel" id="shoes" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden shoes-carousel__button shoes-carousel__button--left shoes-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container shoes-carousel__track-container">
+                <div class="carousel__track--clothing shoes-carousel__track">
+                {% for piece in shoes %}
+        
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide shoes-carousel__slide shoes-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide shoes-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        
+        {% endfor %}
+                </div>
+            </div>
+            {% if shoes.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right shoes-carousel__button shoes-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav shoes-carousel__nav mx-auto">
+                {% for piece in shoes %}
+                {% if forloop.first and shoes.count > 4 %}<button class="carousel__indicator current-slide shoes-carousel__indicator shoes-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != shoes.count %}<button class="carousel__indicator shoes-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+        <div class="carousel accessories-carousel" id="accessories" style="display: block">
+            <button class="carousel__button--clothing carousel__button--left is-hidden accessories-carousel__button accessories-carousel__button--left accessories-is-hidden">
+                <img src="{% static 'assets/left-carousel-arrow.png' %}">
+            </button>
+            <div class="carousel__track-container accessories-carousel__track-container">
+                <div class="carousel__track--clothing accessories-carousel__track">
+                {% for piece in accessories %}
+        
+            {% if forloop.first %}<div class="row d-flex justify-content-center piece-row carousel__slide current-slide accessories-carousel__slide accessories-current-slide mx-auto">{% endif %}
+            
+                {% if piece in pieces %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} selected piece" id="{{ piece.id }}">
+                {% else %}
+                    <div class="closet-card col-3 piece-{{ piece.id }} not-selected piece" id="{{ piece.id }}">
+                {% endif %}
+                    
+                        <div class="card-body mx-auto">
+                            <div class="selected-background">
+                            <img src="{{ piece.image.url }}" class="img-thumbnail img-resize" style="border: none;">
+                            <p class="s1" style="margin-top: 5px; margin-bottom: 5px;">{{ piece.name }}</p>
+                            <p class="b2">{{ piece.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+        <!-- following logic is for determining rows -->
+        {% if forloop.counter|divisibleby:4 %}
+        </div>
+        <div class="row d-flex justify-content-center piece-row carousel__slide accessories-carousel__slide mx-auto">
+        {% endif %}
+        {% if forloop.last %}
+        </div>
+        {% endif %}
+        <!-- end of row logic -->
+        
+        {% endfor %}
+                </div>
+            </div>
+            {% if accessories.count > 4 %}
+            <button class="carousel__button--clothing carousel__button--right accessories-carousel__button accessories-carousel__button--right">
+                <img src="{% static 'assets/right-carousel-arrow.png' %}">
+            </button>
+            {% endif %}
+            <div class="carousel__nav accessories-carousel__nav mx-auto">
+                {% for piece in accessories %}
+                {% if forloop.first and accessories.count > 4 %}<button class="carousel__indicator current-slide accessories-carousel__indicator accessories-current-slide"></button>{% endif %}
+                {% if forloop.counter|divisibleby:4 and forloop.counter != accessories.count %}<button class="carousel__indicator accessories-carousel__indicator"></button>{% endif %}
+                
+                {% endfor %}  
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script src="{% static 'Armoire_app/carousel.js' %}"></script>
+{% endblock %}

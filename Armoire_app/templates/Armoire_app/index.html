@@ -1,0 +1,17 @@
+{% extends "Armoire_app/layout.html" %}
+{% load static %}
+{% block body %}
+<div class="landing-page-container">
+    <img src="{% static 'assets/landing-image.jpg' %}" class="landing-image">
+    <div class="landing-copy-container">
+        <div style="width: 445px; margin: 45px;">
+            <div style="white-space: nowrap; margin-bottom: 20px;">
+                <h1>Get Dressed.</h1>
+            </div>
+            <div style="width: 265px; margin-bottom: 100px;">
+                <a href="{% url 'register' %}" class="label-large" style="white-space: nowrap;">Organize Your Wardrobe<img src="{% static 'assets/right-arrow.png' %}" style="margin-left: 8px;"></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "Armoire_app/layout.html" %}
+
+{% block body %}
+<div class="container">
+        {% if message %}
+            <div class="form alert alert-danger mx-auto" style="width:50%">{{ message }}</div>
+        {% endif %}
+    <div class="form">
+        <form action="{% url 'login' %}" method="post" style="margin-top:67px; display: inline-block; margin-left: auto; margin-right: auto; text-align: left;">
+            {% csrf_token %}
+            <div class="form-group">
+                Username:
+                <input autofocus class="form-control" type="text" name="username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                Password:
+                <input class="form-control" type="password" name="password">
+            </div>
+            <input class="btn-primary-medium" type="submit" value="Login">
+            <br>
+            Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+        </form>
+    
+    
+    </div>
+    {% endblock %}
+
+</div>

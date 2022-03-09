@@ -1,0 +1,27 @@
+<div class="carousel">
+    <button class="carousel__button carousel__button--left is-hidden">
+        <img src="{% static 'assets/left-carousel-arrow.png' %}">
+    </button>
+    <div class="carousel__track-container">
+        <ul class="carousel__track">
+            <li class="carousel__slide current-slide">
+                <img class="carousel__image" src="{% static 'assets/outfit-blank.png' %}">
+            </li>
+            <li class="carousel__slide">
+                <img class="carousel__image" src="{% static 'assets/Armoire.png' %}">
+            </li>
+            <li class="carousel__slide">
+                <img class="carousel__image" src="{% static 'assets/landing-image.jpg' %}">
+            </li>
+        </ul>
+    </div>
+    <button class="carousel__button carousel__button--right">
+        <img src="{% static 'assets/right-carousel-arrow.png' %}">
+    </button>
+
+    <div class="carousel__nav">
+        <button class="carousel__indicator current-slide"></button>
+        <button class="carousel__indicator"></button>
+        <button class="carousel__indicator"></button>
+    </div>
+</div>

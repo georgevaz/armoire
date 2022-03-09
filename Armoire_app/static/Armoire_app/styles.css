@@ -1,0 +1,514 @@
+
+.choose-file::-webkit-file-upload-button {
+    display: none;
+}
+
+.close-button {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    cursor: pointer;
+}
+.img-thumbnail:hover + .close-button, .outfit-grid:hover + .close-button, .close-button:hover {
+    display: block;
+    animation: fade 0.5s;
+}
+
+@keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+.deleted {
+    animation: fade-out 1s;
+}
+@keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+}
+
+.img-resize {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    padding: 0px;
+    border-radius: 0px;
+}
+.outfit-img-resize {
+    width: 100%;
+    height: 112px;
+    object-fit: cover;
+    padding: 0px;
+}
+.outfit-img-col {
+    padding: 0px;
+}
+.clothes-container {
+    width: 100%;
+}
+.selected > .card-body {
+    opacity: 1;
+    
+}
+.not-selected > .card-body {
+    opacity: .2;
+    
+}
+
+.piece {
+    cursor: pointer;
+}
+
+.figma-nav {
+    height: 88px ;
+    background: #FFFFFF;
+}
+
+
+/* The HTML and body are used to make sure the footer stays on the bottom always, regardless of content. If there is not enough content to fill the page, footer will hit bottom of the browser */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 64px;
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+a, a:hover, .label-large:hover {
+    color: #BB5A01;
+    text-decoration: none;
+}
+.form{
+    display: block; 
+    text-align: center;
+}
+.form-control {
+    border: none;
+    background-color: #F4F5F7;
+    width: 600px;
+}
+label {
+    margin-bottom: 0px;
+}
+.form-control:focus {
+    border-color: #F4F5F7;
+    box-shadow: 0 0 0 0.2rem rgba(217, 219, 225, 0.25);
+}
+
+.figma-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 64px;
+    clear: both;
+    background-color: #F7DABF;
+}
+
+.navbar .navbar-nav .nav-link{
+    color:#000000
+}
+.navbar .navbar-nav .nav-link:hover{
+    color:#2F3137;
+}
+.landing-page-container {
+    position: relative;
+    height: calc(100vh - 152px) !important;
+    width: 100%;
+    background: #FFFFFF;
+    overflow: hidden;
+}
+.landing-image {
+    position: absolute;
+    width: 1053;
+    height: auto;
+    margin: 0;
+    right: 0%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    object-fit: cover;
+
+}
+
+.landing-copy-container {
+    position: absolute;
+    width: 408px;
+    height: auto;
+    left: 25%;
+    top: 40%;
+    transform: translate(0, -60%);
+
+
+
+}
+h1 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 72px;
+    line-height: 98px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;    
+}
+h2 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 64px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;    
+}
+h3 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 54px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;    
+}
+h4 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 40px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;    
+}
+
+.label-large {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #BB5A01; 
+}
+.label-small {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #BB5A01; 
+}
+.leads-1 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 32px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;  
+}
+.leads-2 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 24px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;  
+}
+.s1 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;  
+}
+
+p, .b1 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 26px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;  
+
+
+}
+.b2 {
+    font-family: 'Manrope', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 136% */
+    
+    font-feature-settings: 'liga' off;
+    
+    /* Text / Black 900 */
+    
+    color: #000000;  
+
+    white-space: pre-line;
+}
+
+.btn-primary-small {
+    min-width: 66px;
+    width: fit-content;
+    height: 28px;
+    border: none;
+    padding-left: 12px;
+    padding-right: 12px;
+    
+    color: white;
+    background: #BB5A01;
+    border-radius: 6px;
+}
+.btn-primary-medium {
+    width: 100px;
+    height: 40px;
+    border: none;
+    
+    color: white;
+    background: #BB5A01;
+    border-radius: 6px;
+    margin-bottom: 20px;
+
+    
+}
+.btn-primary-large {
+    width: 196px;
+    height: 62px;
+    border: none;
+    color: white;
+    background: #BB5A01;
+    border-radius: 6px;
+}
+.btn-secondary-small {
+    min-width: 66px;
+    width: fit-content;
+    height: 28px;
+    border: none;
+    padding-left: 12px;
+    padding-right: 12px;
+    
+    background: #F7DABF;
+    border-radius: 6px;
+}
+.btn-secondary-medium {
+    width: 100px;
+    height: 40px;
+    border: none;
+    
+    background: #F7DABF;
+    border-radius: 6px;
+}
+.btn-secondary-large {
+    width: 196px;
+    height: 62px;
+    border: none;
+    
+    background: #F7DABF;
+    border-radius: 6px;
+}
+
+.btn-primary-large:focus, .btn-primary-medium:focus, .btn-primary-small:focus, .btn-secondary-large:focus, .btn-secondary-medium:focus, .btn-secondary-small:focus {
+    outline: none;
+}
+
+.btn-primary-large:active, .btn-primary-medium:active, .btn-primary-small:active, .btn-secondary-large:active, .btn-secondary-medium:active, .btn-secondary-small:active {
+    outline: none;
+    -webkit-box-shadow: inset 1px 1px 5px #E8A76C;
+    -moz-box-shadow: inset 1px 1px 5px #E8A76C;
+         box-shadow: inset 1px 1px 5px #E8A76C;
+  outline: none;
+}
+
+.closet-container {
+    position: relative;
+    width: 1230px;
+}
+
+.closet-card {
+    width: 255px;
+    height: auto;
+}
+.closet-card-outfit {
+    width: 228px;
+    height: auto;
+}
+
+.clothing-buttons {
+    width: 580px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.carousel {
+    position: relative;
+    margin: 0 auto;
+}
+
+.carousel__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel__track-container {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel__track {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    position: relative;
+    height: 312px;
+    transition: transform 250ms ease-in;
+}
+.carousel__track--clothing {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    position: relative;
+    height: 418px;
+    transition: transform 250ms ease-in;
+}
+
+.carousel__slide {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+}
+
+.carousel__button {
+    position: absolute;
+    top: 140px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+.carousel__button--clothing {
+    position: absolute;
+    top: 175px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.carousel__button--left {
+    left: -65px;
+    
+}
+.carousel__button--right {
+    right: -65px;
+}
+
+.carousel__button img {
+    width: 16px;
+    
+}
+
+.carousel__nav {
+    display: flex;
+    justify-content: center;
+    padding: 45px 0;
+}
+
+.carousel__indicator {
+    border: 0;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    background-color: #F7DABF;
+    margin: 0 12px;
+    cursor: pointer;
+    
+}
+
+.carousel__indicator.current-slide {
+    background-color: #BB5A01;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.carousel__indicator:focus {
+    outline: none;
+}
+.carousel__button:focus, .carousel__button--clothing:focus{
+    outline: none;
+}

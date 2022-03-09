@@ -1,0 +1,11 @@
+{% extends "Armoire_app/layout.html" %}
+{% load static %}
+{% block body %}
+<div class="container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-secondary">Submit</button>
+    </form>
+</div>
+{% endblock %}
